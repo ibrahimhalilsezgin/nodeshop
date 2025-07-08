@@ -10,7 +10,7 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <h1 class="text-2xl font-bold text-primary">VirtualHub</h1>
+                        <h1 class="text-2xl font-bold text-primary">NodeShop</h1>
                     </div>
                 </div>
                 <div class="hidden md:block">

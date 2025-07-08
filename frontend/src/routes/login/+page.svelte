@@ -143,18 +143,6 @@
           </div>
         </div>
         
-        <!-- Terms Checkbox -->
-        <div class="flex items-start space-x-3">
-          <input
-            type="checkbox"
-            id="terms"
-            required
-            class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-          <label for="terms" class="text-sm text-gray-700 leading-5">
-            <a href="/" class="text-blue-600 hover:text-blue-500 underline">Şartlar ve koşulları</a> kabul ediyorum
-          </label>
-        </div>
         
         <!-- Submit Button -->
         <button

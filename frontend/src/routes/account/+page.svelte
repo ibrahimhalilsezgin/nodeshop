@@ -48,7 +48,9 @@
                         </div>
                         <div class="flex items-center p-3 bg-gray-50 rounded-lg">
 
-                            <button on:click={() => goto('/account/settings')} class="w-full bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">Düzenle</button>
+                            <button on:click={() => goto('/account/settings')} class="w-full bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">Düzenle</button>
+                            <button on:click={() => goto('/account/logout')} class="w-full bg-red-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">Çıkış Yap</button>
+                        
                         </div>
                     </div>
                 </div>

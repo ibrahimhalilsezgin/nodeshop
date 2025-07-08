@@ -3,7 +3,7 @@
 <script  context="module" src="/theme.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechShop - Elektronik Alışveriş</title>
+    <title>NodeShop - Elektronik Alışveriş</title>
     <!-- Flowbite CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <!-- Tailwind CSS -->
