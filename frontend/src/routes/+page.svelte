@@ -21,19 +21,19 @@
         {
             name: "Ahmet Yılmaz",
             role: "Yazılım Geliştiricisi",
-            content: "NodeShop'dan aldığım Windows lisansı sorunsuz çalışıyor. Hızlı teslimat ve güvenli ödeme için teşekkürler!",
+            content: "NodeShop'dan aldığım Websitem sorunsuz çalışıyor. Hızlı teslimat ve güvenli ödeme için teşekkürler!",
             rating: 5
         },
         {
             name: "Ayşe Demir",
-            role: "Grafik Tasarımcısı",
-            content: "Adobe Creative Suite lisansını çok uygun fiyata aldım. Kurulum rehberi çok faydalıydı.",
+            role: "Web Tasarımcısı",
+            content: "Websitemi çok uygun fiyata aldım. Kurulum rehberi çok faydalıydı.",
             rating: 5
         },
         {
             name: "Mehmet Kaya",
             role: "İş Sahibi",
-            content: "Office 2021 lisansı ofisimiz için mükemmel. Canlı destek ekibi çok yardımcı oldu.",
+            content: "Ofisimiz için mükemmel bir websitesi yaptılar. Canlı destek ekibi çok yardımcı oldu.",
             rating: 5
         }
     ];
@@ -447,13 +447,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-6">
                     <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Lisans anahtarları orijinal mi?</h3>
-                        <p class="text-gray-600 leading-relaxed">Evet, tüm lisans anahtarları resmi kanallardan temin edilmiş ve %100 orijinaldir. Garanti belgesi ile birlikte teslim edilir.</p>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Websitelerini Siz mi yazıyorsunuz?</h3>
+                        <p class="text-gray-600 leading-relaxed">Evet, tüm websitelerini biz yazıyoruz.</p>
                     </div>
                     
                     <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
                         <h3 class="text-xl font-bold text-gray-900 mb-3">Teslimat süresi nedir?</h3>
-                        <p class="text-gray-600 leading-relaxed">Ödeme onaylandıktan sonra 30 saniye içinde email adresinize otomatik olarak gönderilir.</p>
+                        <p class="text-gray-600 leading-relaxed">Ödeme onaylandıktan sonra 10-20 dakika içinde email adresinize otomatik olarak gönderilir.</p>
                     </div>
                     
                     <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
@@ -472,11 +472,7 @@
                         <h3 class="text-xl font-bold text-gray-900 mb-3">İade politikanız nasıl?</h3>
                         <p class="text-gray-600 leading-relaxed">Teknik sorun yaşandığında 7 gün içinde koşulsuz iade veya değişim hakkınız bulunur.</p>
                     </div>
-                    
-                    <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Lisanslar kaç cihazda kullanılabilir?</h3>
-                        <p class="text-gray-600 leading-relaxed">Her ürünün kendi lisans koşulları vardır. Ürün detaylarında belirtilen cihaz sayısı kadar kullanım hakkınız bulunur.</p>
-                    </div>
+
                 </div>
             </div>
         {/if}
