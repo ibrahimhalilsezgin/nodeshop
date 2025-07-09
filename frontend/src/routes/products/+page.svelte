@@ -145,12 +145,12 @@
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                  <span class="text-2xl font-bold text-green-600">₺{(product.price * 0.75).toFixed(2)}</span>
-                  <span class="text-sm text-gray-400 line-through">₺{product.price}</span>
+                  <span class="text-2xl font-bold text-green-600">₺{(product.price).toFixed(2)}</span>
+                  <!-- <span class="text-sm text-gray-400 line-through">₺{(product.price / 0.005).toFixed(2)}</span> -->
                 </div>
-                <div class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
+                <!-- <div class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
                   %25 İndirim
-                </div>
+                </div> -->
               </div>
 
               <button
