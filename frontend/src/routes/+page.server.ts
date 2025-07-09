@@ -1,9 +1,9 @@
 import axios from 'axios';
-import {BACKENDURL} from "$env/static/private"
+import {PUBLIC_BACKENDURL} from "$env/static/public"
 export const load = async ({ locals }) => {
 
     const statics = await axios({
-        url:BACKENDURL,
+        url:PUBLIC_BACKENDURL,
         method:'GET',
     })
     return {

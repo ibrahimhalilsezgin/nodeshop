@@ -25,7 +25,7 @@
     
     try {
       const response = await axios({
-        url: data.BACKENDURL +'/auth/login',
+        url: data.PUBLIC_BACKENDURL +'/auth/login',
         method: 'POST',
         data: {
           email: formInputs.email.value,

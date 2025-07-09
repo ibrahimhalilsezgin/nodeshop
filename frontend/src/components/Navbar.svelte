@@ -1,5 +1,8 @@
 <script lang="ts">
     import Links from "./Links.svelte";
+    import {io} from "socket.io-client";
+    import {PUBLIC_BACKENDURL} from "$env/static/public"
+    io(PUBLIC_BACKENDURL)
     export let user;
 
 </script>

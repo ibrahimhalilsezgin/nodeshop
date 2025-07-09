@@ -19,7 +19,7 @@
         isLoading = true;
         try {
             const response = await axios({
-                url: data.BACKENDURL + '/auth/register',
+                url: data.PUBLIC_BACKENDURL + '/auth/register',
                 method: 'POST',
                 data: {
                     firstName: formInputs.firstName.value,

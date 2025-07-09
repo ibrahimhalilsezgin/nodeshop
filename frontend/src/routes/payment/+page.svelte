@@ -64,7 +64,7 @@ const removeFromBasket = (itemId: string, index: number) => {
     
     try {
       const response = await axios({
-        url: data.BACKENDURL + "/api/v1/payment",
+        url: data.PUBLIC_BACKENDURL + "/api/v1/payment",
         method: "POST",
         headers: {
           Authorization: "Bearer " + getCookie("token"),

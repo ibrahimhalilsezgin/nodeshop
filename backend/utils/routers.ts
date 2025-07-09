@@ -110,11 +110,15 @@ router.get('/', async (req, res) => {
       const diffDays = Math.floor(diffHours / 24);
       return `${diffDays} gün önce`;
     }
-
+    const totalRevenue = await paymentModel.aggregate([
+      { $group: { _id: null, total: { $sum: "$totalPrice" } } }
+    ]);
+    const totalEarning = totalRevenue[0]?.total || 0;
     res.send({
       productLength,
       userLength,
       totalPayment,
+      totalEarning, 
       lastSevenDayStats: stats,
       formattedSalesData,
       formattedTopProducts,

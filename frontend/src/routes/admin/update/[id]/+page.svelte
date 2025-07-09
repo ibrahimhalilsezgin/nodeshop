@@ -28,7 +28,7 @@
         try {
             
             const response = await axios({
-                url: BACKENDURL + '/api/v1/updateProduct/'+data.id,
+                url: PUBLIC_BACKENDURL + '/api/v1/updateProduct/'+data.id,
                 method:'POST',
                 headers:{
                     Authorization: 'Bearer ' + getCookie('token')

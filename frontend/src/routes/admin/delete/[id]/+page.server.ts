@@ -1,4 +1,4 @@
-import { BACKENDURL } from '$env/static/private';
+import { PUBLIC_BACKENDURL } from '$env/static/public';
 import { redirect } from '@sveltejs/kit';
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ export const load = async ({ locals,params,cookies }) => {
     let {id} = params
     try {
         const response = await axios({
-            url: BACKENDURL+'/api/v1/getProduct/' + params.id,
+            url: PUBLIC_BACKENDURL+'/api/v1/getProduct/' + params.id,
             method:'get',
             headers:{
                 Authorization:'Bearer ' + cookies.get('token')
@@ -23,6 +23,6 @@ export const load = async ({ locals,params,cookies }) => {
         product,
         id,
         user: locals.user,
-        BACKENDURL
+        PUBLIC_BACKENDURL
     };
 };

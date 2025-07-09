@@ -37,7 +37,7 @@
     
     try {
       const response = await axios({
-        url: data.BACKENDURL + '/api/v1/user/settings',
+        url: data.PUBLIC_BACKENDURL + '/api/v1/user/settings',
         method:'POST',
         headers:{
           Authorization: 'Bearer ' + getCookie('token')
@@ -74,7 +74,7 @@
           smsCode.error.status = false
         }
     const response = await axios({
-      url:data.BACKENDURL + '/api/v1/user/sendverifycode',
+      url:data.PUBLIC_BACKENDURL + '/api/v1/user/sendverifycode',
       method:'POST',
       headers:{
         Authorization: 'Bearer ' + getCookie('token')
@@ -95,7 +95,7 @@
     try {
 
         const response = await axios({
-            url:data.BACKENDURL + '/api/v1/user/verifycode',
+            url:data.PUBLIC_BACKENDURL + '/api/v1/user/verifycode',
             method:'POST',
             headers: {
               Authorization: 'Bearer ' + getCookie('token')

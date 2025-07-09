@@ -31,7 +31,7 @@
         try {
             
             const response = await axios({
-                url: data.BACKENDURL + '/api/v1/deleteProduct/'+data.id,
+                url: data.PUBLIC_BACKENDURL + '/api/v1/deleteProduct/'+data.id,
                 method:'POST',
                 headers:{
                     Authorization: 'Bearer ' + getCookie('token')

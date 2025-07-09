@@ -36,7 +36,7 @@
     async function Save(){
         try {
                 const response = await axios({
-                url:data.BACKENDURL + '/api/v1/createProduct',
+                url:data.PUBLIC_BACKENDURL + '/api/v1/createProduct',
                 method:'POST',
                 headers:{
                     Authorization: 'Bearer ' + getCookie('token')

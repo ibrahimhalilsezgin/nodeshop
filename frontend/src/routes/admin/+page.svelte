@@ -16,7 +16,7 @@
   let updateInterval: NodeJS.Timeout | null = null;
   let errorCount = 0;
   let maxRetries = 3;
-
+  let onlineUser = 0;
   // Real-time update function
   async function updateData() {
     if (isLoading || !browser) return; // Prevent multiple simultaneous requests and SSR issues
@@ -24,10 +24,10 @@
     isLoading = true;
     
     try {
-      const response = await axios.get(data.BACKENDURL, {
+      const response = await axios.get(data.PUBLIC_BACKENDURL, {
         timeout: 5000 // 5 second timeout
       });
-      
+      onlineUser = (await axios(data.PUBLIC_BACKENDURL + '/activeUser')).data.count
       statistics = response.data;
       connectionStatus = 'connected';
       errorCount = 0;
@@ -94,12 +94,7 @@
   // Sample data with real-time updates
   $: salesData = statistics.formattedSalesData || [];
 
-  const categoryData = [
-    { name: 'Elektronik', value: 35, color: '#3B82F6' },
-    { name: 'Giyim', value: 28, color: '#10B981' },
-    { name: 'Ev & Yaşam', value: 20, color: '#F59E0B' },
-    { name: 'Spor', value: 17, color: '#EF4444' }
-  ];
+
 
   const userActivityData = [
     { name: 'Ocak', users: 1200, activeUsers: 800 },
@@ -115,10 +110,11 @@
   $: topProducts = statistics.formattedTopProducts || [];
 
   $: statsData = [
-    { title: 'Toplam Satış', value: '₺245,750', change: 12.5, icon: '💰', color: 'green' },
+    { title: 'Toplam Satış', value: statistics.totalEarning + ' ₺', change: 12.5, icon: '💰', color: 'green' },
     { title: 'Siparişler', value: statistics.totalPayment, change: 8.2, icon: '🛒', color: 'blue' },
     { title: 'Kullanıcılar', value: statistics.userLength || '3,248', change: 5.4, icon: '👥', color: 'purple' },
-    { title: 'Dönüşüm Oranı', value: '3.24%', change: -2.1, icon: '📈', color: 'yellow' }
+    { title: 'Aktif Kullanıcı', value: onlineUser, change: 5.4, icon: '👥', color: 'purple' },
+
   ];
 
   function getStatusColor(status: string) {
@@ -279,7 +275,6 @@
       const lineChartContainer = document.querySelector('.line-chart');
       
       if (barChartContainer) createBarChart(barChartContainer, salesData);
-      if (pieChartContainer) createPieChart(pieChartContainer, categoryData);
       if (lineChartContainer) createLineChart(lineChartContainer, userActivityData);
     }, 100);
   }
@@ -348,9 +343,7 @@
             <option value="1year">Son 1 Yıl</option>
           </select>
           
-          <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-            <span class=" font-semibold">A</span>
-          </div>
+
         </div>
       </div>
     </div>
@@ -405,13 +398,7 @@
           <canvas width="200" height="200"></canvas>
         </div>
         <div class="grid grid-cols-2 gap-4 mt-6">
-          {#each categoryData as item}
-            <div class="flex items-center space-x-2">
-              <div class="w-4 h-4 rounded-full" style="background-color: {item.color}"></div>
-              <span class="text-sm text-gray-600">{item.name}</span>
-              <span class="text-sm font-semibold text-gray-800">{item.value}%</span>
-            </div>
-          {/each}
+
         </div>
       </div>
     </div>
