@@ -3,6 +3,7 @@
     import Navbar from '@/components/Navbar.svelte';
     import { getCookie } from "@/utils/cookie.util.js";
     import { fade } from "svelte/transition";
+    import { BACKENDURL } from "$env/static/private";
 
     export let data;
 
@@ -28,7 +29,7 @@
         try {
             
             const response = await axios({
-                url:'http://localhost:5500/api/v1/updateProduct/'+data.id,
+                url: BACKENDURL + '/api/v1/updateProduct/'+data.id,
                 method:'POST',
                 headers:{
                     Authorization: 'Bearer ' + getCookie('token')

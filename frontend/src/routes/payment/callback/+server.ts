@@ -2,6 +2,7 @@ import Iyzipay from "iyzipay";
 import { json, redirect } from '@sveltejs/kit';
 import axios from "axios";
 import { getCookie } from "../../../utils/cookie.util.js";
+import { BACKENDURL } from "$env/static/private";
 const iyzipay = new Iyzipay({
   apiKey: 'sandbox-qM3Ns8vG8ZYvhb0fG0RpVO8KhN2yyzam',
   secretKey: 'sandbox-g9GM85lZs84ixlzVn6LJuknRMCIPPcFV',
@@ -31,7 +32,7 @@ export async function POST({ request,cookies }) {
   if(result.status == 'success') {
 
     axios({
-        url:'http://localhost:5500/api/v1/payment/savePurchase',
+        url:BACKENDURL + '/api/v1/payment/savePurchase',
         method:'POST',
         headers:{
             Authorization: 'Bearer ' + cookies.get('token')

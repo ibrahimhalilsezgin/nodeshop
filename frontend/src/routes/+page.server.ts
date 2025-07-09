@@ -1,9 +1,9 @@
 import axios from 'axios';
-
+import {BACKENDURL} from "$env/static/private"
 export const load = async ({ locals }) => {
 
     const statics = await axios({
-        url:'http://localhost:5500/',
+        url:BACKENDURL,
         method:'GET',
     })
     return {

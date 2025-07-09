@@ -3,6 +3,7 @@
     import Navbar from '@/components/Navbar.svelte';
     import { getCookie } from "@/utils/cookie.util.js";
     import { goto } from "$app/navigation";
+    import { BACKENDURL } from "$env/static/private";
 
     export let data;
 
@@ -31,7 +32,7 @@
         try {
             
             const response = await axios({
-                url:'http://localhost:5500/api/v1/deleteProduct/'+data.id,
+                url: BACKENDURL + '/api/v1/deleteProduct/'+data.id,
                 method:'POST',
                 headers:{
                     Authorization: 'Bearer ' + getCookie('token')
@@ -55,7 +56,7 @@
 <div class="pt-32">
     {#if success}
         <div class="bg-green-500 w-1/3 mx-auto rounded-lg  text-center">
-            Ürün Silindi Silindi.
+            Ürün Silindi.
         </div>
     {/if}
     <div class="form-container flex items-center justify-center p-4">

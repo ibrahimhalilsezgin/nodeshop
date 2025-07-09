@@ -5,6 +5,7 @@
   import { browser } from '$app/environment';
   import { fade } from 'svelte/transition';
     import { goto } from '$app/navigation';
+    import { BACKENDURL } from '$env/static/private';
   
   export let data: any;
   
@@ -24,7 +25,7 @@
     isLoading = true;
     
     try {
-      const response = await axios.get('http://localhost:5500/', {
+      const response = await axios.get(BACKENDURL, {
         timeout: 5000 // 5 second timeout
       });
       

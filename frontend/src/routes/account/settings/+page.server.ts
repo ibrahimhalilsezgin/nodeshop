@@ -1,3 +1,4 @@
+import { BACKENDURL } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
 import axios from 'axios';
 
@@ -5,7 +6,7 @@ export const load = async ({ locals, cookies }) => {
     if(!locals.user) return redirect(303, '/login')
     let userDetails:any
     const response = await axios({
-        url: 'http://localhost:5500/api/v1/userDetails',
+        url: BACKENDURL + '/api/v1/userDetails',
         method:'GET',
          headers: {
             Authorization: 'Bearer ' + cookies.get('token')

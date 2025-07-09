@@ -2,6 +2,8 @@
   import axios from "axios";
   import { setCookie } from "../../utils/cookie.util";
   import Links from "../../components/Links.svelte";
+    import { fade } from "svelte/transition";
+    import { BACKENDURL } from "$env/static/private";
   
   let formInputs = {
     username: { value: '' },
@@ -24,7 +26,7 @@
     
     try {
       const response = await axios({
-        url: 'http://localhost:5500/auth/login',
+        url: BACKENDURL +'/auth/login',
         method: 'POST',
         data: {
           email: formInputs.email.value,
@@ -53,7 +55,7 @@
 
 <Links />
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4" transition:fade>
   <div class="w-full max-w-md">
     <!-- Login Card -->
     <div class=" rounded-2xl shadow-xl p-8 space-y-6">

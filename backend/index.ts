@@ -10,9 +10,10 @@ const app = express();
 const PORT = 5500;
 
 moment.locale('tr');
-
+// TODO url sistemine geç 
 mongoose.connect(process.env.DatabaseURI || '').then(() => console.log('Database Connected')).catch((e) => console.error(e));
-mongoose.set('strictPopulate', false)
+mongoose.set('strictPopulate', false);
+app.set('trust proxy', true);
 app.use(morgan('dev'))
 app.use(cors({}));
 app.use(bodyParser.urlencoded({ limit: '50mb' }))

@@ -57,6 +57,8 @@ class UserController {
                 email,
                 password,
             }:User = req.body;
+            const IPAddress = req.ip
+
             if(!email || !password) return res.status(400).json({
                 error: 'Tüm Bilgileri giriniz.'
             });
@@ -70,9 +72,9 @@ class UserController {
                 error: 'E-Posta Veya Şifre Yanlış'
             });
             const token = jwt.sign({id: user.id, firstName: user.firstName, lastName: user.lastName,isAdmin: user.admin }, process.env.SecretKey);
-            // user.updateOne({
-            //     IPAddress: IPAddress
-            // });
+
+            userModel.findOne({id: user.id}, {IPAddress: IPAddress})
+
             return res.status(200).json({
                 token
             });

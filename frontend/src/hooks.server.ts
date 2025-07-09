@@ -25,3 +25,4 @@ export const handle: Handle = async ({ event, resolve }) => {
 	// 👇 BU ÇAĞRI ZORUNLU
 	return resolve(event);
 };
+  const url = import.meta.env.URL;

@@ -1,3 +1,4 @@
+import { BACKENDURL } from '$env/static/private';
 import { redirect } from '@sveltejs/kit';
 import axios from 'axios';
 
@@ -6,7 +7,7 @@ export const load = async ({ locals }) => {
     if(!locals.user) throw redirect(303 , '/login')
 
     try {
-        const response = await axios.get('http://localhost:5500/api/v1/getAllProducts');
+        const response = await axios.get( BACKENDURL +'/api/v1/getAllProducts');
         products = response.data.products;
     } catch (e) {
         console.log(e);

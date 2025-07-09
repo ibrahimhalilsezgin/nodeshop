@@ -1,7 +1,9 @@
 <script lang="ts">
+    import { fade } from "svelte/transition";
     import Links from "../../components/Links.svelte";
     import Navbar from "../../components/Navbar.svelte";
     import axios from "axios";
+    import { BACKENDURL } from "$env/static/private";
     
     let formInputs = {
         firstName: { value: '' },
@@ -17,7 +19,7 @@
         isLoading = true;
         try {
             const response = await axios({
-                url: 'http://localhost:5500/auth/register',
+                url: BACKENDURL + '/auth/register',
                 method: 'POST',
                 data: {
                     firstName: formInputs.firstName.value,
@@ -41,7 +43,7 @@
 </script>
 
 <Links />
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" transition:fade>
     <div class="w-full max-w-md">
         <!-- Form Container -->
         <div class=" rounded-2xl shadow-2xl p-8 backdrop-blur-sm border border-white/20">
@@ -162,11 +164,11 @@
                         class="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                     />
                     <label class="text-sm text-gray-600 leading-relaxed">
-                        <a href="/" class="text-blue-600 hover:text-blue-800 hover:underline font-medium transition-colors">
+                        <a href="/legal/termsofuse" class="text-blue-600 hover:text-blue-800 hover:underline font-medium transition-colors">
                             Kullanım koşulları
                         </a> 
                         ve 
-                        <a href="/" class="text-blue-600 hover:text-blue-800 hover:underline font-medium transition-colors">
+                        <a href="/legal/privacypolicy" class="text-blue-600 hover:text-blue-800 hover:underline font-medium transition-colors">
                             gizlilik politikası
                         </a>nı 
                         okudum ve kabul ediyorum.
