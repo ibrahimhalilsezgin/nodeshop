@@ -24,6 +24,7 @@ class ProductController {
             product
         })
     };
+
     async createProduct(req, res) {
         let {
             title,

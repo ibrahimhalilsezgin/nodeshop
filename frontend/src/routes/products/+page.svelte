@@ -3,6 +3,7 @@
   export let data;
   import { fade, fly, scale } from "svelte/transition";
   import { quintOut } from 'svelte/easing';
+    import { goto } from '$app/navigation';
   
   interface Basket {
     id: string;
@@ -83,8 +84,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
       {#each data.products as product, index}
         <div 
-          class="group bg-[#F8F7F4] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-blue-200 hover:-translate-y-2" 
+          class=" group bg-[#F8F7F4] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-blue-200 hover:-translate-y-2" 
           in:fly={{ y: 50, duration: 400, delay: index * 100, easing: quintOut }}
+          
         >
           <!-- Product Image -->
           <div class="relative overflow-hidden">
@@ -121,7 +123,7 @@
           <div class="p-6">
             <!-- Title and Description -->
             <div class="mb-4">
-              <h2 class="text-xl font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+              <h2 class="cursor-pointer text-xl font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors" on:click={() => goto('/products/' + product.id)}>
                 {product.title}
               </h2>
               <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed">

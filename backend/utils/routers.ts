@@ -137,8 +137,10 @@ router.post('/api/v1/user/verifycode', authenticateToken, userController.verifyP
 
 
 router.get('/api/v1/getAllProducts', productController.getAllProducts);
-router.post('/api/v1/createProduct', productController.createProduct);
+router.get('/api/v1/getProductInfo/:id', productController.getProduct)
 
+
+router.post('/api/v1/createProduct', isAdmin, productController.createProduct);
 router.get('/api/v1/getProduct/:id', isAdmin, productController.getProduct);
 router.post('/api/v1/updateProduct/:id', isAdmin, productController.updateProduct);
 router.post('/api/v1/deleteProduct/:id', isAdmin, productController.deleteProduct); 
