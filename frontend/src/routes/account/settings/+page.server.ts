@@ -21,6 +21,7 @@ export const load = async ({ locals, cookies }) => {
 
     return {
         user: locals.user,
-        userDetails
+        userDetails,
+        BACKENDURL
     };
 };

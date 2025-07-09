@@ -38,50 +38,12 @@
         }
     ];
     
-    // Popular products with more details
-    const popularProducts = [
-        { 
-            name: "Windows 11 Pro", 
-            price: "299₺", 
-            oldPrice: "399₺",
-            image: "/windows-logo.png",
-            features: ["Profesyonel Sürüm", "Ömür Boyu Geçerli", "Anında Teslimat"],
-            badge: "En Popüler",
-            badgeColor: "bg-red-500"
-        },
-        { 
-            name: "Office 2021 Pro", 
-            price: "189₺", 
-            oldPrice: "249₺",
-            image: "/office-logo.png",
-            features: ["Word, Excel, PowerPoint", "Outlook Dahil", "Tek Seferlik Ödeme"],
-            badge: "İndirim",
-            badgeColor: "bg-green-500"
-        },
-        { 
-            name: "Antivirus Premium", 
-            price: "89₺", 
-            oldPrice: "129₺",
-            image: "/antivirus-logo.png",
-            features: ["Gelişmiş Koruma", "1 Yıl Lisans", "Çoklu Cihaz"],
-            badge: "Yeni",
-            badgeColor: "bg-blue-500"
-        },
-        { 
-            name: "Adobe Creative Suite", 
-            price: "399₺", 
-            oldPrice: "599₺",
-            image: "/adobe-logo.png",
-            features: ["Tüm Uygulamalar", "Profesyonel Sürüm", "Sürekli Güncellemeler"],
-            badge: "Premium",
-            badgeColor: "bg-purple-500"
-        }
-    ];
+    
+    const popularProducts = data.stats.formattedTopProducts
     
     onMount(() => {
         mounted = true;
         
-        // Stats animation trigger
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !statsVisible) {
@@ -154,7 +116,11 @@
                     <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
                     Türkiye'nin En Güvenilir Yazılım Satış Platformu
                 </div>
-                
+                <br>
+                <div class="inline-flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium mb-8">
+                    <span class="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
+                    Şuanda Madrid / İspanya Sunucumuza Bağlısınız.
+                </div>
                 <h1 class="text-5xl md:text-7xl font-bold text-gray-900 leading-tight mb-6">
                     Hızlı Teslimat. <br class="hidden sm:block">
                     Güvenli Ödeme. <br class="hidden sm:block">

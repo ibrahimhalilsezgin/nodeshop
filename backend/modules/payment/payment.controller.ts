@@ -50,7 +50,7 @@ class PaymentController {
 
         iyzipay.checkoutFormInitialize.create({
             locale: Iyzipay.LOCALE.TR,
-            callbackUrl:'http://localhost:5173/payment/callback',
+            callbackUrl:process.env.frontendURL + '/payment/callback',
             conversationId: conversationId,
             price: price.toFixed(2).toString(),
             paidPrice: (price + 0.2).toFixed(2).toString(),

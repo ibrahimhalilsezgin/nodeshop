@@ -38,7 +38,7 @@ app.post('/upload', (req, res) => {
 
     db.set(id, image); 
 
-    res.status(200).send({ url: `http://localhost:${PORT}/uploads/${id}.png` });
+    res.status(200).send({ url: `https://cdn.ibo.rocks/uploads/${id}.png` });
   });
 });
 

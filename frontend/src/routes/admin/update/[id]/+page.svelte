@@ -3,7 +3,6 @@
     import Navbar from '@/components/Navbar.svelte';
     import { getCookie } from "@/utils/cookie.util.js";
     import { fade } from "svelte/transition";
-    import { BACKENDURL } from "$env/static/private";
 
     export let data;
 

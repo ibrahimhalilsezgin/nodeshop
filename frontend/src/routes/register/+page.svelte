@@ -1,9 +1,9 @@
 <script lang="ts">
+    export let data;
     import { fade } from "svelte/transition";
     import Links from "../../components/Links.svelte";
     import Navbar from "../../components/Navbar.svelte";
     import axios from "axios";
-    import { BACKENDURL } from "$env/static/private";
     
     let formInputs = {
         firstName: { value: '' },
@@ -19,7 +19,7 @@
         isLoading = true;
         try {
             const response = await axios({
-                url: BACKENDURL + '/auth/register',
+                url: data.BACKENDURL + '/auth/register',
                 method: 'POST',
                 data: {
                     firstName: formInputs.firstName.value,

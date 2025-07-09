@@ -6,7 +6,6 @@
     import { getCookie } from "@/utils/cookie.util.js";
     import { fade } from "svelte/transition";
     import { FileUpload } from '@skeletonlabs/skeleton-svelte';
-    import { BACKENDURL } from "$env/static/private";
     const toaster = createToaster({
     });
     export let data;
@@ -37,7 +36,7 @@
     async function Save(){
         try {
                 const response = await axios({
-                url:BACKENDURL + '/api/v1/createProduct',
+                url:data.BACKENDURL + '/api/v1/createProduct',
                 method:'POST',
                 headers:{
                     Authorization: 'Bearer ' + getCookie('token')

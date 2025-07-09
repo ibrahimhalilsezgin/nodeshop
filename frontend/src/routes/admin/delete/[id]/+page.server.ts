@@ -22,6 +22,7 @@ export const load = async ({ locals,params,cookies }) => {
     return {
         product,
         id,
-        user: locals.user
+        user: locals.user,
+        BACKENDURL
     };
 };

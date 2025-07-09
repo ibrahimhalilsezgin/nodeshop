@@ -2,9 +2,8 @@
   import axios from "axios";
   import { setCookie } from "../../utils/cookie.util";
   import Links from "../../components/Links.svelte";
-    import { fade } from "svelte/transition";
-    import { BACKENDURL } from "$env/static/private";
-  
+  import { fade } from "svelte/transition";
+  export let data;
   let formInputs = {
     username: { value: '' },
     email: { value: '' },
@@ -26,7 +25,7 @@
     
     try {
       const response = await axios({
-        url: BACKENDURL +'/auth/login',
+        url: data.BACKENDURL +'/auth/login',
         method: 'POST',
         data: {
           email: formInputs.email.value,

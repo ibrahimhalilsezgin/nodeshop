@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
       sales: p.sales,
       revenue: `₺${p.revenue.toFixed(2)}`
     }));
-
+    console.log(formattedTopProducts)
     // Haftalık satış ve sipariş sayısı (hafta günü bazında)
     const salesData = await paymentModel.aggregate([
       {

@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import axios from 'axios';
+import { BACKENDURL } from "$env/static/private";
 
 export const load = async ({ locals }) => {
 
@@ -24,6 +25,7 @@ export const load = async ({ locals }) => {
 
     return {
 
-        user: locals.user
+        user: locals.user,
+        BACKENDURL
     };
 };

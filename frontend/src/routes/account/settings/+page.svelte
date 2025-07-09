@@ -5,7 +5,6 @@
   import { getCookie } from "../../../utils/cookie.util";
   import { fade, slide } from "svelte/transition";
   import {OtpInput} from '@codersandip/svelte-otp';
-    import { BACKENDURL } from "$env/static/private";
   let formInputs = {
     idenityNumber:'',
     email: '',
@@ -38,7 +37,7 @@
     
     try {
       const response = await axios({
-        url: BACKENDURL + '/api/v1/user/settings',
+        url: data.BACKENDURL + '/api/v1/user/settings',
         method:'POST',
         headers:{
           Authorization: 'Bearer ' + getCookie('token')
@@ -75,7 +74,7 @@
           smsCode.error.status = false
         }
     const response = await axios({
-      url:BACKENDURL + '/api/v1/user/sendverifycode',
+      url:data.BACKENDURL + '/api/v1/user/sendverifycode',
       method:'POST',
       headers:{
         Authorization: 'Bearer ' + getCookie('token')
@@ -96,7 +95,7 @@
     try {
 
         const response = await axios({
-            url:BACKENDURL + '/api/v1/user/verifycode',
+            url:data.BACKENDURL + '/api/v1/user/verifycode',
             method:'POST',
             headers: {
               Authorization: 'Bearer ' + getCookie('token')

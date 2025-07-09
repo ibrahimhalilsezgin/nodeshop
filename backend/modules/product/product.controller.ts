@@ -41,7 +41,7 @@ class ProductController {
             error: 'Geçerli bilgiler girilmedi'
         });
 
-        const response = await axios.post('http://localhost:9404/upload', {
+        const response = await axios.post(process.env.CDNLINK +'/upload', {
         id: id,
         image: image // base64 string
         }, {

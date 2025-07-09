@@ -7,8 +7,7 @@
   import Navbar from "../../components/Navbar.svelte";
   import { fade, fly, scale, slide } from "svelte/transition";
   import { flip } from "svelte/animate";
-    import { BACKENDURL } from "$env/static/private";
-  
+    
   let totalPrice = 0;
   let basket: any = [];
   let isLoading = false;
@@ -65,7 +64,7 @@ const removeFromBasket = (itemId: string, index: number) => {
     
     try {
       const response = await axios({
-        url: BACKENDURL + "/api/v1/payment",
+        url: data.BACKENDURL + "/api/v1/payment",
         method: "POST",
         headers: {
           Authorization: "Bearer " + getCookie("token"),
