@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Navbar from '../../components/Navbar.svelte';
+  import Navbar from '@/components/Navbar.svelte';
   export let data;
   import { fade, fly, scale } from "svelte/transition";
   import { quintOut } from 'svelte/easing';

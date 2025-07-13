@@ -1,7 +1,7 @@
 <script lang="ts">
   import axios from "axios";
   import { setCookie } from "../../utils/cookie.util";
-  import Links from "../../components/Links.svelte";
+  import Links from "@/components/Links.svelte";
   import { fade } from "svelte/transition";
   export let data;
   let formInputs = {

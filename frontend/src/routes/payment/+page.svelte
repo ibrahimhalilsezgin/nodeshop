@@ -4,7 +4,7 @@
   import axios from "axios";
   import { onMount } from "svelte";
   import { getCookie } from "../../utils/cookie.util.js";
-  import Navbar from "../../components/Navbar.svelte";
+  import Navbar from "@/components/Navbar.svelte";
   import { fade, fly, scale, slide } from "svelte/transition";
   import { flip } from "svelte/animate";
     

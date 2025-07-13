@@ -1,8 +1,8 @@
 <script lang="ts">
     export let data;
     import { fade } from "svelte/transition";
-    import Links from "../../components/Links.svelte";
-    import Navbar from "../../components/Navbar.svelte";
+    import Links from "@/components/Links.svelte";
+    import Navbar from "@/components/Navbar.svelte";
     import axios from "axios";
     
     let formInputs = {
