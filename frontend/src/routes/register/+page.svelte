@@ -1,7 +1,6 @@
 <script lang="ts">
     export let data;
     import { fade } from "svelte/transition";
-    import Links from "@/components/Links.svelte";
     import Navbar from "@/components/Navbar.svelte";
     import axios from "axios";
     
@@ -42,7 +41,6 @@
     };
 </script>
 
-<Links />
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" transition:fade>
     <div class="w-full max-w-md">
         <!-- Form Container -->

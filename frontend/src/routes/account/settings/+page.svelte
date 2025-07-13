@@ -1,6 +1,6 @@
 <script lang="ts">
   export let data;
-  import Navbar from "../@/components/Navbar.svelte";
+  import Navbar from "@/components/Navbar.svelte";
   import axios from "axios";
   import { getCookie } from "../../../utils/cookie.util";
   import { fade, slide } from "svelte/transition";

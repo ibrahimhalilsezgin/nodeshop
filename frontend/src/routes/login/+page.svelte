@@ -1,7 +1,6 @@
 <script lang="ts">
   import axios from "axios";
-  import { setCookie } from "../../utils/cookie.util";
-  import Links from "@/components/Links.svelte";
+  import { setCookie } from "@/utils/cookie.util";
   import { fade } from "svelte/transition";
   export let data;
   let formInputs = {
@@ -52,7 +51,6 @@
   };
 </script>
 
-<Links />
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4" transition:fade>
   <div class="w-full max-w-md">
