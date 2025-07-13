@@ -32,7 +32,8 @@ class ProductController {
             stock,
             tags,
             price,
-            image
+            image,
+            file
         }:Product = req.body;        
 
         let id = uuidv4()
@@ -57,11 +58,13 @@ class ProductController {
             stock,
             tags,
             price,
-            image: response.data.url
-        }).save().then(() => {
+            image: response.data.url,
+            file
+        }).save().then((x) => {
         
             return res.status(200).json({
-                message:'Ürün başarıyla oluşturuldu'
+                message:'Ürün başarıyla oluşturuldu',
+                id: x.id
             });
         
         }).catch((err) => {
@@ -144,7 +147,6 @@ class ProductController {
 
     };
 };
-
 
 
 export default new ProductController();

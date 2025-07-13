@@ -4,8 +4,11 @@ import userModel from "../user/user.model";
 import { sendWebhook } from "../../utils/functions";
 import productModel from "../product/product.model";
 import paymentModel from "./payment.model";
+import process from "process";
 import "dotenv/config"
-
+import { pipeline } from 'stream';
+import axios from "axios";
+import {Types,ObjectId} from "mongoose";
 var iyzipay = new Iyzipay({
     apiKey: process.env.IyzipayApiKey,
     secretKey: process.env.IyzipaySecretKey,
@@ -106,109 +109,107 @@ class PaymentController {
     };
 
 
-async savePurchase(req, res) {
-    const usr = req.user;
-    const { token } = req.body;
+    async savePurchase(req, res) {
+        const usr = req.user;
+        const { token } = req.body;
 
-    if (!token) {
-        return res.status(403).json({ error: 'Token Girilmeli.' });
-    }
+        if (!token) {
+            return res.status(403).json({ error: 'Token Girilmeli.' });
+        }
 
-    const user = await userModel.findOne({ id: usr.id });
+        const user = await userModel.findOne({ id: usr.id });
 
-    if (!user) {
-        return res.status(403).json({ error: 'Kullanıcı Giriş Yapmış Olmalı.' });
-    }
+        if (!user) {
+            return res.status(403).json({ error: 'Kullanıcı Giriş Yapmış Olmalı.' });
+        }
 
-    const result = await new Promise((resolve, reject) => {
-        iyzipay.checkoutForm.retrieve({ token }, (err, result) => {
-            if (err) reject(err);
-            else resolve(result);
+        const result = await new Promise((resolve, reject) => {
+            iyzipay.checkoutForm.retrieve({ token }, (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
         });
-    });
 
-    if (result.status !== 'success') {
-        return res.status(400).json({ error: 'Ödeme başarısız.' });
+        if (result.status !== 'success') {
+            return res.status(400).json({ error: 'Ödeme başarısız.' });
+        }
+
+        const itemIds = result.itemTransactions.map(item => item.itemId);
+
+        // Product'ları çek
+        const products = await productModel.find({ id: { $in: itemIds } });
+
+        // Kolay eşleştirmek için map'e dönüştür
+        const productMap = {};
+        products.forEach(p => {
+            productMap[p.id] = p;
+        });
+
+        // Her itemTransaction'u ürün bilgileriyle zenginleştir
+        const enrichedItems = result.itemTransactions.map(item => {
+            const prod = productMap[item.itemId] || {};
+            return {
+                itemId: item.itemId,
+                paidPrice: item.paidPrice,
+                price: item.price,
+                productTitle: prod.title || 'Bilinmeyen Ürün',
+                productDetails: prod.details || '',
+                productTags: prod.tags || [],
+                productImage: prod.image || ''
+            };
+        });
+
+        // Tutarı hesapla
+        let price = 0;
+        enrichedItems.forEach(item => {
+            price += item.price;
+        });
+
+        // Kullanıcıya kaydet
+        const updatedUser = await userModel.findOneAndUpdate(
+            { id: usr.id },
+            {
+                $push: {
+                    purchases: {
+                        basketId: result.basketId,
+                        cardAssociation: result.cardAssociation,
+                        binNumber: result.binNumber,
+                        lastFourDigits: result.lastFourDigits,
+                        items: enrichedItems
+                    }
+                }
+            },
+            { new: true }
+        );
+        await paymentModel.create({
+            userId: user._id,
+            basketId: result.basketId,
+            cardAssociation: result.cardAssociation,
+            binNumber: result.binNumber,
+            lastFourDigits: result.lastFourDigits,
+            items: enrichedItems,
+            totalPrice: price
+        });
+        // Webhook
+        const itemTitles = enrichedItems.map(i => i.productTitle).join(', ');
+        sendWebhook('Satın Alım Tamamlandı', `
+    Ad Soyad: ${user.firstName} ${user.lastName}
+    Tc Kimlik Numarası: ${user.idenityNumber}
+    E-Mail: ${user.email}
+    Telefon Numarası: ${user.gsmNumber}
+    IP Adresi: ${user.IPAddress}
+    Şehir: ${user.city}
+    Ülke: ${user.country}
+    Posta Kodu: ${user.zipCode}
+
+    Ürünler: ${itemTitles}
+    Tutar: ${price}
+        `);
+
+        return res.json(updatedUser);
     }
 
-    const itemIds = result.itemTransactions.map(item => item.itemId);
-
-    // Product'ları çek
-    const products = await productModel.find({ id: { $in: itemIds } });
-
-    // Kolay eşleştirmek için map'e dönüştür
-    const productMap = {};
-    products.forEach(p => {
-        productMap[p.id] = p;
-    });
-
-    // Her itemTransaction'u ürün bilgileriyle zenginleştir
-    const enrichedItems = result.itemTransactions.map(item => {
-        const prod = productMap[item.itemId] || {};
-        return {
-            itemId: item.itemId,
-            paidPrice: item.paidPrice,
-            price: item.price,
-            productTitle: prod.title || 'Bilinmeyen Ürün',
-            productDetails: prod.details || '',
-            productTags: prod.tags || [],
-            productImage: prod.image || ''
-        };
-    });
-
-    // Tutarı hesapla
-    let price = 0;
-    enrichedItems.forEach(item => {
-        price += item.price;
-    });
-
-    // Kullanıcıya kaydet
-    const updatedUser = await userModel.findOneAndUpdate(
-        { id: usr.id },
-        {
-            $push: {
-                purchases: {
-                    basketId: result.basketId,
-                    cardAssociation: result.cardAssociation,
-                    binNumber: result.binNumber,
-                    lastFourDigits: result.lastFourDigits,
-                    items: enrichedItems
-                }
-            }
-        },
-        { new: true }
-    );
-    await paymentModel.create({
-        userId: user._id,
-        basketId: result.basketId,
-        cardAssociation: result.cardAssociation,
-        binNumber: result.binNumber,
-        lastFourDigits: result.lastFourDigits,
-        items: enrichedItems,
-        totalPrice: price
-    });
-    // Webhook
-    const itemTitles = enrichedItems.map(i => i.productTitle).join(', ');
-    sendWebhook('Satın Alım Tamamlandı', `
-Ad Soyad: ${user.firstName} ${user.lastName}
-Tc Kimlik Numarası: ${user.idenityNumber}
-E-Mail: ${user.email}
-Telefon Numarası: ${user.gsmNumber}
-IP Adresi: ${user.IPAddress}
-Şehir: ${user.city}
-Ülke: ${user.country}
-Posta Kodu: ${user.zipCode}
-
-Ürünler: ${itemTitles}
-Tutar: ${price}
-    `);
-
-    return res.json(updatedUser);
+    
 }
-
-
-
-}
-
 
 export default new PaymentController()

@@ -7,7 +7,6 @@
   import { goto } from '$app/navigation';
   
   export let data: any;
-  
   let selectedPeriod = '7days';
   let statistics: any = {};
   let isLoading = false;
@@ -97,12 +96,12 @@
 
 
   const userActivityData = [
-    { name: 'Ocak', users: 1200, activeUsers: 800 },
-    { name: 'Şubat', users: 1400, activeUsers: 900 },
-    { name: 'Mart', users: 1800, activeUsers: 1200 },
-    { name: 'Nisan', users: 2200, activeUsers: 1500 },
-    { name: 'Mayıs', users: 2800, activeUsers: 1800 },
-    { name: 'Haziran', users: 3200, activeUsers: 2100 }
+    { name: 'Ocak', users: statistics.userLength, activeUsers: onlineUser },
+    { name: 'Şubat', users: statistics.userLength, activeUsers: onlineUser },
+    { name: 'Mart', users: statistics.userLength, activeUsers: onlineUser },
+    { name: 'Nisan', users: statistics.userLength, activeUsers: onlineUser },
+    { name: 'Mayıs', users: statistics.userLength, activeUsers: onlineUser },
+    { name: 'Haziran', users: statistics.userLength, activeUsers: onlineUser }
   ];
 
   $: recentOrders = statistics.recentPayments || [];
@@ -287,11 +286,12 @@
   $: if (salesData) {
     updateCharts();
   }
+
 </script>
 
 <Navbar user={data.user}/>
 
-<main class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 pt-24" transition:fade>
+<main class="min-h-screen    pt-24" transition:fade>
   <!-- Header -->
   <header class="bg-[#F8F7F4] shadow-sm border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -332,18 +332,6 @@
               Yenile
             {/if}
           </button>
-          
-          <select 
-            bind:value={selectedPeriod}
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="7days">Son 7 Gün</option>
-            <option value="30days">Son 30 Gün</option>
-            <option value="90days">Son 90 Gün</option>
-            <option value="1year">Son 1 Yıl</option>
-          </select>
-          
-
         </div>
       </div>
     </div>
@@ -362,7 +350,7 @@
                 {stat.change >= 0 ? '↗' : '↘'} {Math.abs(stat.change)}% bu hafta
               </p>
             </div>
-            <div class="w-16 h-16 rounded-xl bg-gradient-to-r {getStatColorClass(stat.color)} flex items-center justify-center">
+            <div class="w-16 h-16 rounded-xl {getStatColorClass(stat.color)} flex items-center justify-center">
               <span class="text-3xl">{stat.icon}</span>
             </div>
           </div>
@@ -435,7 +423,7 @@
           {#each recentOrders as order}
             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
               <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center">
                   <span class=" text-sm font-semibold">
                     {getInitials(order.customer)}
                   </span>
@@ -471,7 +459,7 @@
           {#each topProducts as product, index}
             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
               <div class="flex items-center space-x-4">
-                <div class="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center">
                   <span class=" text-sm font-bold">{index + 1}</span>
                 </div>
                 <div>
@@ -492,11 +480,11 @@
     <div class="mt-8 bg-[#F8F7F4] rounded-2xl shadow-lg p-6">
       <h3 class="text-xl font-semibold text-gray-800 mb-6">Hızlı İşlemler</h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <button on:click={() => {goto('/admin/create/')}} class="flex items-center justify-center space-x-2 p-4 bg-gradient-to-r from-blue-500 to-blue-600  rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105">
+        <button on:click={() => {goto('/admin/create/')}} class=" cursor-pointer flex items-center justify-center space-x-2 p-4   rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105">
           <span class="text-xl">📦</span>
           <span>Ürün Ekle</span>
         </button>
-        <button on:click={() => {goto('/admin/products/')}}  class="flex items-center justify-center space-x-2 p-4 bg-gradient-to-r from-blue-500 to-blue-600  rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105">
+        <button on:click={() => {goto('/admin/products/')}}  class="cursor-pointer flex items-center justify-center space-x-2 p-4   rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105 hover:border border-gray-300">
           <span class="text-xl">📦</span>
           <span>Ürünler</span>
         </button>

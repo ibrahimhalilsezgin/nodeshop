@@ -11,8 +11,8 @@ export default defineConfig({
     },
   },
   server: {
-    host: '0.0.0.0', // dış erişim için bu şart
+    host: '0.0.0.0',
     port: 5173,
-    allowedHosts: ['nodeshop.ibo.rocks'], // burası zaten doğru
+    allowedHosts: ['nodeshop.ibo.rocks'],
   },
 });

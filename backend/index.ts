@@ -32,14 +32,13 @@ app.use(router);
 let activeUser = 0;
 
 io.on('connection', (socket) => {
-  activeUser++;
-  console.log(`🟢 Bağlandı | Aktif kullanıcı: ${activeUser}`);
+    activeUser++;
 
-  socket.on('disconnect', () => {
-    activeUser--;
-    console.log(`🔴 Ayrıldı | Aktif kullanıcı: ${activeUser}`);
-  });
+    socket.on('disconnect', () => {
+      activeUser--;
+    });
 });
+
 
 app.get('/activeUser', (req, res) => res.json({count: activeUser}))
 

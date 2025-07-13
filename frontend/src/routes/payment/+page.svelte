@@ -13,6 +13,8 @@
   let isLoading = false;
   let animateTotal = false;
   let basketError = false;
+
+  // TODO error sistemi yaz
   onMount(() => {
     if (!data.user) goto("/login");
    
@@ -92,11 +94,11 @@ const removeFromBasket = (itemId: string, index: number) => {
 
 <Navbar user={data.user} />
 
-<main class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col items-center justify-center pt-32 pb-12 px-4" transition:fade>
+<main class="min-h-screen flex flex-col items-center justify-center pt-32 pb-12 px-4" transition:fade>
   <div class="bg-[#F8F7F4] rounded-2xl shadow-2xl w-full max-w-4xl p-8 relative overflow-hidden">
     
     <!-- Background decoration -->
-    <div class="absolute top-0 left-0 w-full h-20 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-5 rounded-t-2xl"></div>
+    <div class="absolute top-0 left-0 w-full h-20  opacity-5 rounded-t-2xl"></div>
     
     <!-- Header -->
     <div class="text-center mb-8 relative">
@@ -125,7 +127,7 @@ const removeFromBasket = (itemId: string, index: number) => {
         </div>
         <h2 class="text-2xl font-semibold text-gray-700 mb-4">Sepetiniz Boş</h2>
         <p class="text-gray-500 mb-8">Alışverişe başlamak için ürün ekleyin</p>
-        <a href="/products" class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+        <a href="/products" class="inline-flex items-center px-8 py-3 font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
           🛍️ Alışverişe Başla
         </a>
       </div>
@@ -135,12 +137,12 @@ const removeFromBasket = (itemId: string, index: number) => {
         {#each basket as product, index (product.id + '-' + index)}
 
           <div 
-            class="flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-xl px-6 py-4 shadow-sm hover:shadow-md transition-all duration-200 group"
+            class="flex items-center justify-between border border-gray-200 rounded-xl px-6 py-4 shadow-sm hover:shadow-md transition-all duration-200 group"
             animate:flip={{ duration: 300 }}
             transition:fly={{ x: -20, duration: 300, delay: index * 50 }}
           >
             <div class="flex items-center space-x-4">
-              <div class="w-12 h-12 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center">
+              <div class="w-12 h-12  rounded-lg flex items-center justify-center">
                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                 </svg>
@@ -168,7 +170,7 @@ const removeFromBasket = (itemId: string, index: number) => {
       </div>
 
       <!-- Summary Section -->
-      <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200">
+      <div class="rounded-xl p-6 border border-gray-200">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">💰 Ödeme Özeti</h3>
         
         <div class="space-y-3">
@@ -206,7 +208,7 @@ const removeFromBasket = (itemId: string, index: number) => {
         </button>
       {#if totalPrice < 100000}
         <button
-          class="order-1 sm:order-2 px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          class="order-1 sm:order-2 px-12 py-4  cursor-pointer hover:from-green-700 hover:to-emerald-700 font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           on:click={buyButton}
           disabled={isLoading}
           class:animate-pulse={isLoading}

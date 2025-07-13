@@ -12,10 +12,16 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@types/node": "^24.0.10",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "fastify": "^5.4.0",
     "fastify-multipart": "^5.4.0",
-    "multer": "^2.0.1"
+    "fs": "^0.0.1-security",
+    "multer": "^2.0.1",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.13"
   }
 }

@@ -151,7 +151,7 @@ router.post('/api/v1/deleteProduct/:id', isAdmin, productController.deleteProduc
 
 
 router.post('/api/v1/payment',authenticateToken ,paymentController.startPayment)
-
 router.post('/api/v1/payment/savePurchase',authenticateToken ,paymentController.savePurchase)
+router.get('/api/v1/download/:id',authenticateToken ,userController.downloadProduct);
 
 export default router;  

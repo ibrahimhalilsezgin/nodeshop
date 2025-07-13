@@ -1,116 +1,148 @@
 <script lang="ts">
-    import axios from "axios";
-    import Navbar from "@/components/Navbar.svelte";
-    import { goto } from "$app/navigation";
-    import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte';
-    import { getCookie } from "@/utils/cookie.util.js";
-    import { fade } from "svelte/transition";
-    import { FileUpload } from '@skeletonlabs/skeleton-svelte';
-    const toaster = createToaster({
-    });
-    export let data;
+	import axios from "axios";
+	import Navbar from "@/components/Navbar.svelte";
+	import { goto } from "$app/navigation";
+	import { Toaster, createToaster } from '@skeletonlabs/skeleton-svelte';
+	import { getCookie } from "@/utils/cookie.util.js";
+	import { fade } from "svelte/transition";
+	import { PUBLIC_CDNURL } from "$env/static/public";
 
+	const toaster = createToaster({});
+	export let data;
 
-    let formInputs:any = {
-        title:{
-            value: ''
-        },
-        details:{
-            value: ''
-        },
-        tags:{
-            value: []
-        },
-        stock:{
-            value: 0
-        },
-        price:{
-            value: 0
-        },
-        image:{
-            value:''
-        }
-    }
-    let success = false;
-    let error:string;
-    async function Save(){
-        try {
-                const response = await axios({
-                url:data.PUBLIC_BACKENDURL + '/api/v1/createProduct',
-                method:'POST',
-                headers:{
-                    Authorization: 'Bearer ' + getCookie('token')
-                },
-                data:{
-                    title:formInputs.title.value,
-                    details: formInputs.details.value,
-                    stock:formInputs.stock.value,
-                    tags: formInputs.tags.value,
-                    price:formInputs.price.value,
-                    image: formInputs.image.value
-                }
-            
-            });
+	let selectedFileName = '';
+    let base64String = '';
+	let formInputs: any = {
+		title: { value: '' },
+		details: { value: '' },
+		tags: { value: [] },
+		stock: { value: 0 },
+		price: { value: 0 },
+		image: { value: '' },
+		file: { value: '' }
+	};
 
-            if(response.status == 200) {
-                success = true;
-                setTimeout(() => { goto('/admin/products')}, 1500)
-            }
-        } catch (err:any) {
-            console.log(err)
+	let success = false;
+	let error: string;
 
-            if(err?.response.data.error) {
-                error = err?.response.data.error
-                toaster.error({
-                    type:'error',
-                    title:'Hata Oluştu',
-                    description: err?.response.data.error,
-                    
-                })
-            }
-        }
+	async function Save() {
+		try {
+			const response = await axios({
+				url: data.PUBLIC_BACKENDURL + '/api/v1/createProduct',
+				method: 'POST',
+				headers: {
+					Authorization: 'Bearer ' + getCookie('token')
+				},
+				data: {
+					title: formInputs.title.value,
+					details: formInputs.details.value,
+					stock: formInputs.stock.value,
+					tags: formInputs.tags.value,
+					price: formInputs.price.value,
+					image: formInputs.image.value,
+					file: formInputs.file.value
+				}
+			});
 
+			if (response.status === 200) {
+                const uploadRes = await axios.post(PUBLIC_CDNURL + '/upload', {
+						id:response.data.id,
+						file: `data:application/zip;base64,${base64String}`
+					}, {
+						headers: {
+							Authorization: "Server PAPYABVPsUZMnAXSxUwVcbjZyTynKEZeMKwGGPACqbxpFnCHkxSzKhArNWzAQuUm"
+						}
+					});
 
-    }
-let selectedFileName = '';
+					formInputs.file.value = uploadRes.data.url;
+					console.log('ZIP dosyası CDN\'e yüklendi:', uploadRes.data.url);
+				success = true;
+				setTimeout(() => { goto('/admin/products') }, 1500);
+			}
+		} catch (err: any) {
+			console.log(err);
 
-// handleFileChange fonksiyonunu şu şekilde güncelleyin:
-const handleFileChange = async (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    const files = target.files;
-    
-    if (files && files.length > 0) {
-        const file = files[0];
-        selectedFileName = file.name;
-        
-        try {
-            const base64 = await fileToBase64(file);
-            formInputs.image.value = base64;
-            console.log('Base64 oluşturuldu:', base64.substring(0, 50) + '...');
-        } catch (error) {
-            console.error('Dosya yüklenirken hata:', error);
-            toaster.error({
-                type: 'error',
-                title: 'Dosya Hatası',
-                description: 'Dosya yüklenirken bir hata oluştu.'
-            });
-        }
-    }
-};
+			if (err?.response?.data?.error) {
+				error = err.response.data.error;
+				toaster.error({
+					type: 'error',
+					title: 'Hata Oluştu',
+					description: err.response.data.error
+				});
+			}
+		}
+	}
 
-// fileToBase64 fonksiyonu zaten doğru, değişiklik yok
-const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-    });
-};
+	const fileToBase64 = (file: File): Promise<string> => {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = () => resolve(reader.result as string);
+			reader.onerror = error => reject(error);
+		});
+	};
 
+	function arrayBufferToBase64(buffer: ArrayBuffer): string {
+		let binary = '';
+		const bytes = new Uint8Array(buffer);
+		const len = bytes.byteLength;
+		for (let i = 0; i < len; i++) {
+			binary += String.fromCharCode(bytes[i]);
+		}
+		return window.btoa(binary);
+	}
 
+	const handleFileChange = async (event: Event) => {
+		const target = event.target as HTMLInputElement;
+		const files = target.files;
+		if (files && files.length > 0) {
+			const file = files[0];
+			selectedFileName = file.name;
 
+			try {
+				const base64 = await fileToBase64(file);
+				formInputs.image.value = base64;
+				console.log('Base64 oluşturuldu:', base64.substring(0, 50) + '...');
+			} catch (error) {
+				console.error('Dosya yüklenirken hata:', error);
+				toaster.error({
+					type: 'error',
+					title: 'Dosya Hatası',
+					description: 'Resim yüklenemedi.'
+				});
+			}
+		}
+	};
+
+	const handleFileChange2 = async (event: Event) => {
+		const target = event.target as HTMLInputElement;
+		const files = target.files;
+		if (files && files.length > 0) {
+			const file = files[0];
+			selectedFileName = file.name;
+
+			try {
+				const reader = new FileReader();
+				reader.readAsArrayBuffer(file);
+
+				reader.onload = async () => {
+					base64String = arrayBufferToBase64(reader.result as ArrayBuffer);
+					const id = crypto.randomUUID();
+
+					
+				};
+			} catch (error) {
+				console.error('ZIP yükleme hatası:', error);
+				toaster.error({
+					type: 'error',
+					title: 'Dosya Hatası',
+					description: 'ZIP dosyası yüklenemedi.'
+				});
+			}
+		}
+	};
 </script>
+
 
 
 <!-- {JSON.stringify(data.products)} -->
@@ -232,6 +264,31 @@ const fileToBase64 = (file: File): Promise<string> => {
                                     <img src={formInputs.image.value} alt="Önizleme" class="w-full h-32 object-cover rounded-lg">
                                 </div>
                             {/if}
+                        </div>
+                         <div>
+                        <div class="max-w-sm mt-4">
+                            <label class="block">
+                                <input 
+                                    type="file" 
+                                    class="hidden" 
+                                    id="fileInput" 
+                                    accept=".zip, .rar" 
+                                    on:change={handleFileChange2}
+                                >
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                                    <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                    </svg>
+                                    <p class="text-gray-600">Dosya seç</p>
+                                </div>
+                            </label>
+                            
+                            {#if selectedFileName}
+                                <div class="mt-3 text-sm text-gray-500">
+                                    {selectedFileName}
+                                </div>
+                            {/if}
+                            
                         </div>
                     </div>         
            </div>

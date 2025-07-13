@@ -3,6 +3,35 @@
     import { fade } from "svelte/transition";
     import { quadIn } from "svelte/easing";
     import { goto } from "$app/navigation";
+    import { PUBLIC_BACKENDURL, PUBLIC_CDNURL } from "$env/static/public";
+    import axios from "axios";
+    import { getCookie } from "@/utils/cookie.util.js";
+
+async function download(id: string) {
+    try {
+        const res = await axios({
+            url: PUBLIC_BACKENDURL + `/api/v1/download/${id}`,
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + getCookie('token')
+            },
+            responseType: 'blob'  // çok önemli
+        });
+
+        const url = URL.createObjectURL(res.data);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${id}.zip`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    } catch (error: any) {
+        alert(error?.response?.data?.error || 'İndirme başarısız oldu.');
+    }
+}
+
 
     export let data;
 </script>
@@ -121,6 +150,9 @@
                                             <div class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
                                                 <span class="text-gray-700 font-medium">{item.productTitle}</span>
                                                 <span class="text-green-600 font-semibold">{item.price}₺</span>
+                                                <div class="bg-green-500 w-32 text-center items-center rounded-lg cursor-pointer" on:click={() => download(item.itemId)}>
+                                                İndir
+                                            </div>
                                             </div>
                                         {/each}
                                     </div>
@@ -130,9 +162,14 @@
                                         <div class="text-right">
                                             <p class="text-sm text-gray-500">Toplam</p>
                                             <p class="text-lg font-bold text-gray-900">
-                                                {purchase.items.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2)}₺
+                                                {purchase.items.reduce((sum:number, item:any) => sum + parseFloat(item.price), 0).toFixed(2)}₺
                                             </p>
                                         </div>
+                                    </div>
+                                    <!-- MESSAGES -->
+                                    <div class="bg-gray-100 rounded-lg">
+                                        <div class="text-gray-500">Admin</div>
+                                        <div class="text-gray-900">Selamlar Ürünümüzü Satın Aldığınız İçin Teşekkürler</div>
                                     </div>
                                 </div>
                             {/each}

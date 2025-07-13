@@ -7,6 +7,8 @@ import twilio from "twilio"
 
 const client = twilio(process.env.TwilioSID, process.env.TwilioAuth)
 import { generateSnowflake,validateEmail } from "../../utils/functions";
+import axios from "axios";
+import { pipeline } from "stream";
 class UserController {
         async Register(req, res) {
             let {
@@ -179,6 +181,49 @@ class UserController {
             })
             
         }
+
+
+        async downloadProduct(req, res) {
+        const { id } = req.params;
+
+        const user = await userModel.find({ id: req.user.id });
+        
+        let bought = false;
+        for (const usr of user) {
+            for(const purchase of usr.purchases){
+
+                for(const pur of purchase[0].items) {
+                    if(pur.itemId == id) {
+                        bought = true
+                        break;
+                    }
+                }
+            }
+        }
+        if (!bought) return res.status(403).json({ error: 'Satın almadan indirme sağlayamazsın' });
+
+        try {
+            const response = await axios.get(`${process.env.CDNLINK}/download/${id}.zip`, {
+                headers: {
+                    Authorization: "Server PAPYABVPsUZMnAXSxUwVcbjZyTynKEZeMKwGGPACqbxpFnCHkxSzKhArNWzAQuUm"
+                },
+                responseType: 'stream'
+            });
+
+            res.setHeader('Content-Type', 'application/zip');
+            res.setHeader('Content-Disposition', `attachment; filename="${id}.zip"`);
+
+            pipeline(response.data, res, (err) => {
+                if (err) {
+                    console.error('Dosya aktarım hatası:', err);
+                    if (!res.headersSent) res.status(500).send('Dosya aktarım hatası');
+                }
+            });
+        } catch (err) {
+            console.error('CDN bağlantı hatası:', err);
+            res.status(500).json({ error: 'Dosya alınamadı' });
+        }
+    }
 }
 
 

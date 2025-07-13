@@ -8,6 +8,7 @@ interface Product {
     image: string
     cargoType:string
     status: boolean
+    file:File
 };
 
 export default Product;
