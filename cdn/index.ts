@@ -54,7 +54,7 @@ const match = data.match(/^data:(.+);base64,(.+)$/);
       return res.status(500).send({ error: 'Failed to save file' });
     }
 
-    res.status(200).send({ url: `https://cdn.ibo.rocks/uploads/${filename}` });
+    res.status(200).send({ url: `${process.env.domain}/uploads/${filename}` });
   });
 });
 
