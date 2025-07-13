@@ -13,50 +13,7 @@ const UPLOAD_DIR = path.resolve('uploads');
 // Klasör yoksa oluştur
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR);
 
-app.post('/upload', (req, res) => {
-  const auth = req.headers.authorization;
-  if (auth !== "Server PAPYABVPsUZMnAXSxUwVcbjZyTynKEZeMKwGGPACqbxpFnCHkxSzKhArNWzAQuUm") {
-    return res.status(403).send({ error: 'Unauthorized' });
-  }
 
-const { id, image, file } = req.body;
-const data = image || file; // hangisi varsa onu al
-
-if (!id || !data) {
-  return res.status(400).send({ error: 'Missing id or file (base64)' });
-}
-
-const match = data.match(/^data:(.+);base64,(.+)$/);
-
-  if (!match) {
-    return res.status(400).send({ error: 'Invalid base64 format' });
-  }
-
-  const mimeType = match[1];     // örn: application/zip
-  const base64Data = match[2];
-
-  // MIME tipinden uzantı al
-  const extMap = {
-    'image/png': 'png',
-    'image/jpeg': 'jpg',
-    'application/zip': 'zip',
-    'application/pdf': 'pdf',
-    'video/mp4': 'mp4',
-  };
-  const ext = extMap[mimeType] || 'bin';
-
-  const filename = `${id}.${ext}`;
-  const filePath = path.join(UPLOAD_DIR, filename);
-
-  fs.writeFile(filePath, base64Data, { encoding: 'base64' }, (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send({ error: 'Failed to save file' });
-    }
-
-    res.status(200).send({ url: `${process.env.domain}/uploads/${filename}` });
-  });
-});
 
 app.post('/upload', (req, res) => {
   const auth = req.headers.authorization;
@@ -106,6 +63,23 @@ app.post('/upload', (req, res) => {
   }
 
   res.status(200).send(responses);
+});
+
+app.get('/uploads/:filename', (req, res) => {
+  const { filename } = req.params;
+  const filePath = path.join(UPLOAD_DIR, filename);
+  const ext = path.extname(filename).toLowerCase();
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+
+  if (!imageExtensions.includes(ext)) {
+    return res.status(400).send({ error: 'Desteklenmeyen dosya türü' });
+  }
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).send({ error: 'Resim bulunamadı' });
+  }
+
+  res.sendFile(filePath);
 });
 
 
