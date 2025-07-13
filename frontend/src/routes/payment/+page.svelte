@@ -92,7 +92,7 @@ const removeFromBasket = (itemId: string, index: number) => {
 
       if(e.response.status >= 400) {
         error.status = true;
-        error.message = e.response.data;
+        error.message = e.response.data.error;
       }
     } finally {
       isLoading = false;
