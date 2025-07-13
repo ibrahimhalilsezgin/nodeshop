@@ -3,10 +3,12 @@ import { json, redirect } from '@sveltejs/kit';
 import axios from "axios";
 import { getCookie } from "../../../utils/cookie.util.js";
 import { PUBLIC_BACKENDURL } from "$env/static/public";
+import { PRIVATE_IYZICOAPIKEY, PRIVATE_IYZICOSECRETKEY, PRIVATE_IYZICOURI } from "$env/static/private";
+
 const iyzipay = new Iyzipay({
-  apiKey: 'sandbox-qM3Ns8vG8ZYvhb0fG0RpVO8KhN2yyzam',
-  secretKey: 'sandbox-g9GM85lZs84ixlzVn6LJuknRMCIPPcFV',
-  uri: 'https://sandbox-api.iyzipay.com'
+  apiKey: PRIVATE_IYZICOAPIKEY,
+  secretKey: PRIVATE_IYZICOSECRETKEY,
+  uri: PRIVATE_IYZICOURI
 });
 
 export async function POST({ request,cookies }) {
