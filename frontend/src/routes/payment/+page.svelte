@@ -13,7 +13,10 @@
   let isLoading = false;
   let animateTotal = false;
   let basketError = false;
-
+  let error = {
+    status: false,
+    message:''
+  }
   // TODO error sistemi yaz
   onMount(() => {
     if (!data.user) goto("/login");
@@ -86,6 +89,11 @@ const removeFromBasket = (itemId: string, index: number) => {
       }
     } catch (e: any) {
       console.log(e?.response?.data);
+
+      if(e.response.status >= 400) {
+        error.status = true;
+        error.message = e.response.data;
+      }
     } finally {
       isLoading = false;
     }
@@ -116,6 +124,14 @@ const removeFromBasket = (itemId: string, index: number) => {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <span class="text-red-800 font-medium">Sepet Tutarı 100.000 veya üstü olamaz lütfen ürün çıkartın.!</span>
+          </div>
+        {/if}
+        {#if error.status}
+          <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center" transition:slide>
+            <svg class="w-5 h-5 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-red-800 font-medium">{error.message}</span>
           </div>
         {/if}
     {#if basket.length === 0}
