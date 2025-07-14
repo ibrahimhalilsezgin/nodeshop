@@ -3,6 +3,9 @@
   export let data;
   import { fade, fly, scale, slide } from "svelte/transition";
   import { quintOut, elasticOut } from 'svelte/easing';
+    import axios from 'axios';
+    import { PUBLIC_BACKENDURL } from '$env/static/public';
+    import { getCookie } from '@/utils/cookie.util.js';
  
   interface Basket {
     id: string;
@@ -10,11 +13,29 @@
     type: boolean; // true = virtual
     price: number;
   }
+
+  interface Comment {
+    id: string;
+    username: string;
+    avatar: string;
+    rating: number;
+    date: string;
+    content: string;
+  }
  
   let itemAdded = false;
   let addedProductId = '';
   let isLoading = false;
- 
+  let showCommentForm = false;
+  let newComment = {
+    username: `${data.user.firstName} ${data.user.lastName[0]}..`,
+    rating: 5,
+    content: ''
+  };
+
+  // Örnek yorumlar
+  let comments: Comment[] = data.product.comments
+
   const addItemToBasket = async (
     id: string,
     basketItemName: string,
@@ -53,6 +74,47 @@
       addedProductId = '';
     }, 3000);
   };
+
+  const addComment = async () => {
+
+
+    if (newComment.content.trim()) {
+      const comment: Comment = {
+        id: Date.now().toString(),
+        username: newComment.username,
+        avatar: `https://ui-avatars.com/api/?name=${data.user.firstName}+${data.user.lastName[0]}&background=6366f1&color=fff`,
+        rating: newComment.rating,
+        date: 'Az önce',
+        content: newComment.content
+      };
+      
+      comments = [comment, ...comments];
+      const response = await axios({
+          url:PUBLIC_BACKENDURL + '/api/v1/addComment/' + data.product.id,
+          method:'post',
+          headers:{
+            Authorization: 'Bearer ' + getCookie('token')
+          },
+          data:{
+              username: comment.username,
+              rating: comment.rating,
+              content: comment.content
+          }
+      })
+      // Form'u sıfırla
+      newComment = {
+        username: `${data.user.firstName} ${data.user.lastName[0]}..`,
+        rating: 5,
+        content: ''
+      };
+      
+      showCommentForm = false;
+    }
+  };
+
+  const renderStars = (rating: number) => {
+    return Array(5).fill(0).map((_, i) => i < rating);
+  };
 </script>
 
 <Navbar user={data.user} />
@@ -79,7 +141,7 @@
   <!-- Main Content -->
   <div class="container mx-auto px-4 pt-32 pb-16 relative z-10">
     <div class="max-w-4xl mx-auto">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
         
         <!-- Product Image -->
         <div class="flex justify-center" transition:scale={{ duration: 600, easing: quintOut }}>
@@ -122,7 +184,7 @@
 
           <!-- Features -->
           <div class="grid grid-cols-2 gap-4 py-6">
-            <div class="flex items-center space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200/50">
+            <div class="flex items-center space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
               <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
@@ -134,7 +196,7 @@
               </div>
             </div>
             
-            <div class="flex items-center space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200/50">
+            <div class="flex items-center space-x-3 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
               <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                 <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -188,6 +250,115 @@
               <span>24/7 Destek</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="mt-16" transition:fade={{ duration: 400, delay: 200 }}>
+        <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200 p-8">
+          
+          <!-- Comments Header -->
+          <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-bold text-gray-800">Müşteri Yorumları</h2>
+            <button 
+              on:click={() => showCommentForm = !showCommentForm}
+              class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700  px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+            >
+              {showCommentForm ? 'İptal Et' : 'Yorum Yap'}
+            </button>
+          </div>
+
+          <!-- Comment Form -->
+          {#if showCommentForm}
+            <div class="bg-gray-50 rounded-2xl p-6 mb-8" transition:slide={{ duration: 300 }}>
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">Yorum Ekle</h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Puan</label>
+                  <div class="flex items-center space-x-2">
+                    {#each Array(5) as _, i}
+                      <button 
+                        on:click={() => newComment.rating = i + 1}
+                        class="text-2xl {i < newComment.rating ? 'text-yellow-500' : 'text-gray-300'} hover:text-yellow-500 transition-colors"
+                      >
+                        ★
+                      </button>
+                    {/each}
+                    <span class="text-sm text-gray-600 ml-2">({newComment.rating}/5)</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Yorum</label>
+                  <textarea 
+                    bind:value={newComment.content}
+                    rows="4" 
+                    placeholder="Yorumunuzu yazın..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none"
+                  ></textarea>
+                </div>
+                
+                <div class="flex space-x-4">
+                  <button 
+                    on:click={addComment}
+                    class="bg-blue-600 hover:bg-blue-700  px-6 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    Yorum Gönder
+                  </button>
+                  <button 
+                    on:click={() => showCommentForm = false}
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    İptal
+                  </button>
+                </div>
+              </div>
+            </div>
+          {/if}
+
+          <!-- Comments List -->
+          <div class="space-y-6">
+            {#each comments as comment (comment.id)}
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200" transition:fly={{ y: 20, duration: 300 }}>
+                <div class="flex items-start space-x-4">
+                  <img 
+                    src={comment.avatar} 
+                    alt={comment.username}
+                    class="w-12 h-12 rounded-full flex-shrink-0"
+                  />
+                  
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="flex items-center space-x-3">
+                        <h4 class="font-semibold text-gray-800">{comment.username}</h4>
+                        <div class="flex items-center space-x-1">
+                          {#each renderStars(comment.rating) as filled}
+                            <svg class="w-4 h-4 {filled ? 'text-yellow-500' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                          {/each}
+                        </div>
+                      </div>
+                      <span class="text-sm text-gray-500">{comment.date}</span>
+                    </div>
+                    
+                    <p class="text-gray-700 leading-relaxed">{comment.content}</p>
+                  </div>
+                </div>
+              </div>
+            {/each}
+          </div>
+
+          <!-- No Comments Message -->
+          {#if comments.length === 0}
+            <div class="text-center py-12">
+              <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+              </svg>
+              <p class="text-gray-500 text-lg">Henüz yorum yok. İlk yorumu siz yapın!</p>
+            </div>
+          {/if}
         </div>
       </div>
     </div>

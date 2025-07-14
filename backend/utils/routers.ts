@@ -148,6 +148,7 @@ router.post('/api/v1/createProduct', isAdmin, productController.createProduct);
 router.get('/api/v1/getProduct/:id', isAdmin, productController.getProduct);
 router.post('/api/v1/updateProduct/:id', isAdmin, productController.updateProduct);
 router.post('/api/v1/deleteProduct/:id', isAdmin, productController.deleteProduct); 
+router.post('/api/v1/addComment/:id', authenticateToken, productController.addComment); 
 
 
 router.post('/api/v1/payment',authenticateToken ,paymentController.startPayment)

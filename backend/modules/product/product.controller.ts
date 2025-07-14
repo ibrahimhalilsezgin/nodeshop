@@ -146,6 +146,32 @@ class ProductController {
 
 
     };
+
+    async addComment(req, res) {
+        let { id } = req.params;
+        let {username, content, rating} = req.body;
+
+
+        if(!username || !content || !rating || rating <= 0  || rating > 5) return res.status(500).json({
+            error:'Yorum Boş Bırakılamaz'
+        });
+
+        const comment = await productModel.findOneAndUpdate({ id: id }, {
+            $push:{
+                comments:{
+                    id: (await productModel.findOne({id:id}))?.comments.length + 1,
+                    username: username,
+                    avatar: `https://ui-avatars.com/api/?name=${username}&background=6366f1&color=fff`,
+                    content: content,
+                    rating: rating
+                }
+            }
+        })
+
+        return res.status(200).json({
+            message:'Yorum Eklendi.'
+        })
+    }
 };
 
 

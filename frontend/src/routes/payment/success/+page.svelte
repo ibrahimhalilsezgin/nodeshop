@@ -49,7 +49,7 @@
                 🏠 Ana Sayfaya Dön
             </a>
             
-            <a href="/orders" 
+            <a href="/account" 
                class="inline-block w-full px-8 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors duration-200">
                 📦 Siparişlerimi Görüntüle
             </a>

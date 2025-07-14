@@ -37,7 +37,18 @@ const schema = new Schema({
     status: {
         type:Boolean,
         default: true
-    }
+    },
+    comments:[{
+        id:Number,
+        username:String,
+        content: String,
+        avatar:String,
+        rating:Number,
+        date: {
+            type:Date,
+            default: new Date()
+        }
+    }]
 });
 
 export default model('product', schema);  
