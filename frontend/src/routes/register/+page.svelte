@@ -44,7 +44,7 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4" transition:fade>
     <div class="w-full max-w-md">
         <!-- Form Container -->
-        <div class=" rounded-2xl shadow-2xl p-8 backdrop-blur-sm border border-white/20">
+        <div class=" rounded-2xl shadow-2xl p-8 backdrop-blur-sm border border-gray-200">
             <!-- Header -->
             <div class="text-center mb-8">
                 <div class="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -177,7 +177,7 @@
                 <button 
                     type="submit" 
                     disabled={isLoading}
-                    class="w-full bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    class="w-full bg-gradient-to-r from-blue-500 to-indigo-600  py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 cursor-pointer"
                 >
                     {#if isLoading}
                         <div class="flex items-center justify-center">
